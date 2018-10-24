@@ -1,0 +1,25 @@
+<section id="main" class="wrapper">
+	<div class="inner inlogin">
+		<img class="logo-login" src="images/logo.png">
+		<!-- Form -->
+		<section>
+			<form ng-submit="login(user)" class="form">
+				<div class="row uniform">
+				<div class="12u$"><span class="text-danger loginerror">{{ error }}</span></div>
+					<div class="12u$">
+						<input type="email" class="" ng-model="user.email" placeholder="LOGIN" required=""/>
+					</div>
+					<div class="12u$">
+						<input type="password" class="" ng-model="user.password" placeholder="PASSWORD" required=""/>
+					</div>
+					<div class="12u$">
+						<ul class="actions">
+						<li><input type="submit" value="LOGIN" class="special" /></li>
+						</ul>
+					</div>
+				</div>
+			</form>
+		</section>
+
+	</div>
+</section>

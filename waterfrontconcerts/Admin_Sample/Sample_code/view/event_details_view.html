@@ -1,0 +1,522 @@
+<section id="intro" class="wrapper style1">
+    <div class="addevent-topbar">
+
+        <div class="addeven-top">
+      <a href ui-sref="app.events"><img src="images/ic-header-back.png"/></a>
+            <div class="page-title" ng-if="event._id">{{eventTitle}}</div>
+            <div class="last-edited" ng-if="event._id">Last edited: {{event.updatedAt | date : "dd MMM yyyy"}} at {{event.updatedAt | date : "H.mm"}} by {{event.updatedBy}}</div>
+            <div class="page-title" ng-if="!event._id ">Add Event</div>
+            <div class="single-new" ng-if="!event._id"></div>
+        </div>
+        <div class="pubdraft">
+            <select ng-model="event.isPublished" convert-to-number>
+                <option value="1">PUBLISHED</option>
+                <option value="0">DRAFT</option>
+            </select>
+        </div>
+    </div>
+    <div class="venue-inner">
+        <form class="addEventForm" ng-submit="createEvent(event)">
+            <div class="venue-inner">
+                <section id="three" class="wrapper style1 fade-up">
+                    <div class="inner">
+                      <div class="eventabnon" id="evenTab" onclick="evenTab();">GENERAL INFO</div>
+                        <div class="maintab">
+                            <input class="evendp-tab" id="tab1" type="radio" name="tabs" checked>
+                            <label class="evendp-tab" for="tab1">GENERAL INFO</label>
+                            <input class="evendp-tab" id="tab2" type="radio" name="tabs">
+                            <label class="evendp-tab" for="tab2">TICKETS</label>
+                            <input class="evendp-tab" id="tab3" type="radio" name="tabs" ng-checked="package == true">
+                            <label class="evendp-tab" for="tab3">PACKAGES</label>
+                            <input class="evendp-tab" id="tab4" type="radio" name="tabs">
+                            <label class="evendp-tab" for="tab4">MEDIA</label>
+                            <input class="evendp-tab" id="tab5" type="radio" name="tabs">
+                            <label class="evendp-tab" for="tab5">TERMS/RULES</label>
+                            <div class="sectiontab" id="content1">
+                                <div class="split style1">
+                                    <section class="geninfotab">
+
+                                        <div class="over-input">
+                                            <div class="field">
+                                                <label for="name">TITLE</label>
+                                            <div class="feturedout">
+                                                <input onclick="add_border();" type="text" ng-model="event.title" name="title" id="title"  maxlength="50" />
+                                            </div>
+                                            <div class="feturedin">
+                                  <a class="button submit wf-button" ng-click="toggleFeatured()">
+
+                                <span ng-if="event.isFeatured == 0" class="notFeatured">
+                                <span class="featured">
+                                  <img src="images/ic-featured.png">FEATURED</span>
+                                </span>
+                                 <span ng-if="event.isFeatured == 1" class="isFeatured" >
+                                 <span class="featured">
+                                 <img src="images/ic-featured.png">FEATURED</span>
+                                 </span>
+                                 </a>
+                                            </div>
+
+                                            </div>
+                                            </div>
+                                            <div class="field">
+                                                <label for="subtitle">SUBTITLE</label>
+                                                <textarea name="subTitle" id="subTitle" rows="3" ng-model="event.subTitle" maxlength="50" ></textarea>
+                                            </div>
+                                            <div class="for-col for-col-mar">
+                                                <div class="field half first event-fbg">
+                                                    <label for="name">EVENT START </label>
+                                                    <input class="form-control evncal"
+                                                           placeholder="Select a date"
+                                                           ng-model="event.startDate"
+                                                           min-date="todayDate"
+                                                           ng-model-options="{ updateOn: 'blur' }" moment-picker="event.startDate" format="MM-DD-YYYY">
+                                                </div>
+                                                <div class="field half event-fbg">
+                                                    <label>&nbsp</label>
+                                                    <input class="form-control startend"
+                                                           placeholder="Select a time"
+                                                           ng-model="event.startTime"
+                                                           ng-model-options="{ updateOn: 'blur' }" moment-picker="event.startTime" format="hh:mm A" show-header="false">
+                                                </div>
+                                            </div>
+                                            <div class="for-col float-right">
+                                                <div class="field half first event-fbg">
+                                                    <label>EVENT END</label>
+                                                    <input class="form-control evncal"
+                                                           placeholder="Select a date"
+                                                           min-date="todayDate"
+                                                           ng-model="event.endDate"
+                                                           ng-model-options="{ updateOn: 'blur' }" moment-picker="event.endDate" format="MM-DD-YYYY">
+                                                </div>
+                                                <div class="field half event-fbg">
+                                                    <label>&nbsp</label>
+                                                    <input class="form-control startend"
+                                                           placeholder="Select a time"
+                                                           ng-model="event.endTime"
+                                                           ng-model-options="{ updateOn: 'blur' }" moment-picker="event.endTime" format="hh:mm A" show-header="false">
+                                                </div>
+                                            </div>
+                                            <div class="for-col for-col-mar">
+                                                <div class="field half first event-fbg">
+                                                    <label >DOOR TIME</label>
+                                                    <input class="form-control startend"
+                                                           placeholder="Select a time"
+                                                           ng-model="event.doorTime"
+                                                           ng-model-options="{ updateOn: 'blur' }" moment-picker="event.doorTime" format="hh:mm A" show-header="false">
+                                                </div>
+                                            </div>
+                                            <div class="for-col-mar">
+                                                <div class="field full first event-fbg">
+                                                    <label for="name">SEO </label>
+                                                    <input type="text" ng-model="event.seoTitle" placeholder="Title" name="seoTitle" id="seoTitle"  maxlength="50" />
+                                                </div>
+                                                <div class="field full event-fbg">
+                                                    <input type="text" ng-model="event.seoDescription" placeholder="Description" name="seoDescription" id="seoDescription"  maxlength="50" />
+                                                </div>
+                                            </div>
+                                            <div class="field event-fbg">
+                                                <label >VENUE</label>
+                                                <input type="text" placeholder="Search Venue" ng-model="event.venue" ui-event="{autocompletecreate:'changeClass(searchVenue)'}" ui-autocomplete="searchVenue()" ng-click="venueChange()" ng-change="venueChange()">
+                                            </div>
+                                            <div class="field">
+                                                <label>DESCRIPTION</label>
+                                                <text-angular name="description" ng-model="event.description"></text-angular>
+                                            </div>
+                                    </section>
+                                    <section>
+                                        <div class="box alt">
+                                            <div class="row uniform gly-img">
+                                                <div class="12u$" ng-if="event.featureImage" ng-click="addImages()">
+                                                  <span class="image fit">
+                                                  <img ng-src="{{event.featureImage}}" alt="">
+                                                  </span>
+                                                </div>
+                                                <div class="4u foru" ng-repeat="img in event.galleryImages | limitTo:9" ng-click="addImages()">
+                                                  <span class="image fitSquare" ng-if="$index < 8">
+                                                    <img ng-src="{{img}}" alt="" width="120">
+                                                  </span>
+                                                    <span class="image fitSquare" ng-if="$index == 8 && event.galleryImages.length == 9">
+                                                    <img ng-src="{{img}}" alt="" width="120">
+                                                  </span>
+                                                    <span class="image fitSquare" ng-if="$index == 8 && event.galleryImages.length > 9">
+                                                    <img src="../images/more_img.png" alt="" width="120">
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="addevn-upimg" ng-click="addImages()">
+                                            <a href class="button submit wf-button">UPLOAD IMAGES</a>
+                                        </div>
+                                        <div class="addven-chart" ng-if="settingCharts">
+                                          <h3>SELECT SEATING CHART</h3>
+                                          <div ng-class="{'mdborder' : event.venueSittingChartImage == settingChart}" ng-repeat="settingChart in settingCharts">
+                                              <input type="radio" name="venueSittingChartImage" id="img_{{$index}}" ng-model="event.venueSittingChartImage" ng-click="toggleImagesSelection(settingChart)" value={{settingChart}}/>
+                                              <div class="12u$"><span class="image fit"><label for="img_{{$index}}"><img ng-src="{{settingChart}}" alt="images" /></span></label></div>
+                                          </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <div class="sectiontab" id="content2">
+                                <div class="split style1">
+                                    <section class="geninfotab">
+                                            <div class="for-col for-col-mar float-left">
+                                                <div class="field half first event-fbg">
+                                                    <label for="name">ON SALE</label>
+                                                    <!--<input ng-model="event.onSaleDate" type="text" class="datepicker" id="datepicker3" placeholder="12 Sep 2017">-->
+                                                    <input class="form-control evncal"
+                                                           placeholder="Select a date"
+                                                           ng-model="event.onSaleDate"
+                                                           min-date="todayDate"
+                                                           ng-model-options="{ updateOn: 'blur' }" moment-picker="event.onSaleDate" format="MM-DD-YYYY">
+                                                </div>
+                                                <div class="field half event-fbg">
+                                                    <label >&nbsp</label>
+                                                    <!--<select ng-model="event.onSaleTime">
+                                                        <option value="00">00.00</option>
+                                                    </select>-->
+                                                    <input class="form-control startend"
+                                                           placeholder="Select a time"
+                                                           ng-model="event.onSaleTime"
+                                                           ng-model-options="{ updateOn: 'blur' }" moment-picker="event.onSaleTime" format="hh:mm A" show-header="false">
+                                                </div>
+                                            </div>
+                                            <div class="for-col float-right">
+                                                <div class="field half first event-fbg">
+                                                    <label >CUT OFF</label>
+                                                    <!--<input type="text" ng-model="event.cutOffDate" class="datepicker" id="datepicker4" placeholder="12 Sep 2017">-->
+                                                    <input class="form-control evncal"
+                                                           placeholder="Select a date"
+                                                           ng-model="event.cutOffDate"
+                                                           min-date="todayDate"
+                                                           ng-model-options="{ updateOn: 'blur' }" moment-picker="event.cutOffDate" format="MM-DD-YYYY">
+                                                </div>
+                                                <div class="field half event-fbg">
+                                                    <label >&nbsp</label>
+                                                    <input class="form-control startend"
+                                                           placeholder="Select a time"
+                                                           ng-model="event.cutOffTime"
+                                                           ng-model-options="{ updateOn: 'blur' }" moment-picker="event.cutOffTime" format="hh:mm A" show-header="false">
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <label for="name">GENERAL TICKETS LINK</label>
+                                                <input type="text" name="generalTicketLink" id="generalTicketLink" ng-model="event.generalTicketLink"/>
+                                            </div>
+                                        <div class="package-button pack-btn-rs pack-ticket">
+                                            <button type="button" class="button submit wf-button" id="addticket" ng-click="addTicket()">ADD TICKET</button>
+                                        </div>
+                                        <div class="line-space-ticket"></div>
+                                        <div style="padding: 15px 0 15px 0" ng-repeat="ticket in event.tickets">
+                                            <div class="media">
+                                                <div class="field">
+                                                    <label for="name">TICKET NAME</label>
+                                                    <input type="text" name="name" id="name" ng-model="event.tickets[$index].name"/>
+                                                </div>
+                                                <div class="field">
+                                                    <label for="subtitle">TICKET LINK</label>
+                                                    <input type="text" name="subtitle" ng-model="event.tickets[$index].link">
+                                                </div>
+                                                <div class="for-col price-cls">
+                                                    <div class="field half first event-fbg">
+                                                        <label for="name">PRICE</label>
+                                                        <input type="text" placeholder="$33" ng-model="event.tickets[$index].price">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="reduce-section">
+                                                <div>
+                                                    <div class="reduce-ticket" id="reduceprice" ng-init="event.tickets[$index].isReducedPrice = true" ng-click="event.tickets[$index].isReducedPrice = !event.tickets[$index].isReducedPrice">
+                                                        <img src="images/drop-down-right.png" ng-if="event.tickets[$index].isReducedPrice" class="dd-right">
+                                                        <img src="images/drop-down-black.png" ng-if="!event.tickets[$index].isReducedPrice" class="dd-bottom" >
+                                                        Change Price/Presale
+                                                    </div>
+                                                    <div class="tic-del" ng-click="deleteTicket($index)"><img src="images/del.png"> <span class="hide-pack">DELETE TICKET</span></div>
+                                                </div>
+                                                <div class="reduce-dd" collapse="event.tickets[$index].isReducedPrice">
+                                                    <div class="for-col for-col-mar">
+                                                        <div class="field half first event-fbg">
+                                                            <label for="name">CHANGE PRICE TO</label>
+                                                            <input type="text" ng-model="event.tickets[$index].reducePrice" placeholder="$33">
+                                                        </div>
+                                                    </div>
+
+                                                      <div class="for-col float-right geninfotab">
+                                                          <div class="field half first event-fbg">
+                                                                <label >AFTER</label>
+                                                                <!--<input type="text" class="datepicker" id="datepicker7" placeholder="31 Sep 2017">-->
+                                                              <input class="form-control evncal"
+                                                                       placeholder="Select a date"
+                                                                       ng-model="event.tickets[$index].reducePriceDate"
+                                                                       ng-model-options="{ updateOn: 'blur' }" moment-picker="event.tickets[$index].reducePriceDate" format="MM-DD-YYYY">
+                                                            </div>
+                                                            <div class="field half event-fbg">
+                                                                <label >&nbsp</label>
+                                                              <input class="form-control startend"
+                                                                       placeholder="Select a time"
+                                                                       ng-model="event.tickets[$index].reducePriceTime"
+                                                                       ng-model-options="{ updateOn: 'blur' }" moment-picker="event.tickets[$index].reducePriceTime" format="hh:mm A" show-header="false">
+                                                            </div>
+                                                            </div>
+
+                                                       <!-- <div class="for-col for-col-mar">
+                                                        <div class="field event-fbg sponser-width">
+                                                            <label >SPONSOR</label>
+                                                            <input type="text" placeholder="Search Sponsor" ng-model="event.tickets[$index].sponsor" ui-event="{autocompletecreate:'changeClassSponsor(searchSponsor)'}" ui-autocomplete="searchSponsor()" ng-change="sponsorChange(event.tickets[$index].sponsor, $index)" ng-focus="sponsorChange(event.tickets[$index].sponsor, $index)">
+                                                        </div>
+                                                      </div>
+                                                      <div class="for-col float-right">
+                                                        <div class="field event-fbg promo-width">
+                                                            <label >PROMO CODE</label>
+                                                            <input type="text" placeholder="" ng-model="event.tickets[$index].promoCode">
+                                                        </div>
+                                                      </div> -->
+
+
+                                                    <div class="field reduce-check">
+                                                        <!--<input type="checkbox" name="presale" id="presale">-->
+                                                        <input type="checkbox" name="presale{{$index}}" id="presale{{$index}}" ng-model="event.tickets[$index].isPresale"
+                                                               ng-true-value="true" ng-false-value="false">
+                                                        <label for="presale{{$index}}">Presale Ticket</label>
+                                                    </div>
+
+                                                    <div class="ds-presale" ng-if="event.tickets[$index].isPresale">
+
+                                                          <!-- <div class="field ds-half event-fbg promo-width" ng-if="event.tickets[$index].isPresale">
+                                                              <label >PRESALE NAME</label>
+                                                              <input type="text" placeholder="Radio Presale" ng-model="event.tickets[$parent.$index].presales[$index].name">
+                                                          </div> -->
+
+                                                    <div class="for-col for-col-mar" ng-if="event.tickets[$index].isPresale">
+                                                      <div class="field half first event-fbg">
+                                                          <label for="name">START PRESALE</label>
+                                                          <!--<input type="text" class="datepicker" id="datepicker8" placeholder="31 Sep 2017">-->
+                                                          <input class="form-control"
+                                                                 placeholder="Select a date"
+                                                                 ng-model="event.tickets[$index].startPresaleDate"
+                                                                 ng-model-options="{ updateOn: 'blur' }" moment-picker="event.tickets[$index].startPresaleDate" format="MM-DD-YYYY">
+                                                      </div>
+                                                      <div class="field half event-fbg">
+                                                          <label >&nbsp</label>
+                                                          <input class="form-control"
+                                                                 placeholder="Select a time"
+                                                                 ng-model="event.tickets[$index].startPresaleTime"
+                                                                 ng-model-options="{ updateOn: 'blur' }" moment-picker="event.tickets[$index].startPresaleTime" format="hh:mm A" show-header="false">
+                                                      </div>
+                                                    </div>
+                                                    <div class="for-col float-right delpre-padding" ng-if="event.tickets[$index].isPresale">
+                                                        <div class="field half first event-fbg">
+                                                            <label >END PRESALE</label>
+                                                            <!--<input type="text" class="datepicker" id="datepicker9" placeholder="31 Sep 2017">-->
+                                                            <input class="form-control"
+                                                                   placeholder="Select a date"
+                                                                   ng-model="event.tickets[$index].endPresaleDate"
+                                                                   ng-model-options="{ updateOn: 'blur' }" moment-picker="event.tickets[$index].endPresaleDate" format="MM-DD-YYYY">
+                                                        </div>
+                                                        <div class="field half event-fbg">
+                                                            <label >&nbsp</label>
+                                                            <input class="form-control"
+                                                                   placeholder="Select a time"
+                                                                   ng-model="event.tickets[$index].endPresaleTime"
+                                                                   ng-model-options="{ updateOn: 'blur' }" moment-picker="event.tickets[$index].endPresaleTime" format="hh:mm A" show-header="false">
+                                                        </div>
+                                                    </div>
+
+                                                      <!-- <div class="delete-presale">
+                                                        <img src="images/del.png"><span>Delete Presale</span>
+                                                      </div> -->
+
+                                                      <!-- <div class="line-presale"></div> -->
+
+
+                                                      <div class="for-col for-col-mar">
+                                                       <div class="field event-fbg sponser-width">
+                                                           <label >SPONSOR</label>
+                                                           <!-- <select ng-model="event.tickets[$index].sponsor">
+                                                               <option value="" disabled selected>--Choose Sponsor--</option>
+                                                               <option ng-value="sponsor._id" ng-selected="event.tickets[$index].sponsor == sponsor._id" ng-repeat="sponsor in sponserList">{{sponsor.name}}</option>
+                                                           </select> -->
+                                                           <input type="text" placeholder="Search Sponsor" ng-model="event.tickets[$index].sponsor" ui-event="{autocompletecreate:'changeClassSponsor(searchSponsor)'}" ui-autocomplete="searchSponsor()" ng-change="sponsorChange(event.tickets[$index].sponsor, $index)" ng-focus="sponsorChange(event.tickets[$index].sponsor, $index)">
+                                                       </div>
+                                                     </div>
+                                                     <div class="for-col float-right">
+                                                       <div class="field event-fbg promo-width">
+                                                           <label >PROMO CODE</label>
+                                                           <input type="text" placeholder="" ng-model="event.tickets[$index].promoCode">
+                                                       </div>
+                                                     </div>
+
+                                                    </div>
+                                                     <!-- <div class="field ds-half-button" ng-if="event.tickets[$index].isPresale">
+                                                       <button type="button" class="ds-presale-button" id="addticket" ng-click="addTicket()">ADD PRESALE</button>
+                                                     </div> -->
+
+
+
+
+
+                                                    <!-- <div class="field reduce-check">
+                                                        <input type="checkbox" name="vip" id="vip" ng-checked="event.tickets[$index].type == 'VIP'" ng-click="event.tickets[$index].type = 'VIP'">
+                                                        <label for="vip">VIP</label>
+                                                    </div>
+
+                                                    <div class="field reduce-check">
+                                                        <input type="checkbox" name="ga" id="ga" ng-checked="event.tickets[$index].type == 'GA'" ng-click="event.tickets[$index].type = 'GA'">
+                                                        <label for="ga">GA</label>
+                                                    </div>
+
+                                                    <div class="field ga-width">
+                                                        <input type="text" name="subtitle" placeholder="{{event.tickets[$index].type}} link" ng-model="event.tickets[$index].reducePriceTicketLink">
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <span id="TicketData"> </span>
+                                    </section>
+                                    <section class="sitebarcheck">
+                                        <div class="addven-chart" ng-if="event.venueSittingChartImage">
+                                            <h3>SEATING CHART</h3>
+                                            <div class="12u$"><span class="image fit"><img ng-src="{{event.venueSittingChartImage}}" alt="Image not found"></span></div>
+                                        </div>
+
+                                        <div class="addven-pay" ng-if="typeOfPayments">
+                                            <h3>TYPES OF PAYMENT ACCEPTED</h3>
+                                            <div class="12u$">
+                                                <span ng-repeat="payment in typeOfPayments">{{payment}} <br></span>
+                                            </div>
+                                        </div>
+
+                                    </section>
+                                </div>
+                            </div>
+                            <div class="sectiontab" id="content3">
+                                <div class="package-button pack-btn-rs">
+                                    <button type="button" class="button submit wf-button" id="add" ng-click="addPackage()">ADD PACKAGE</button>
+                                </div>
+                                <div class="line-space"></div>
+                                <div class="select-package">
+
+                                    <select ng-model="template" ng-change="addTemplateToPackage(template)">
+                                        <option value="">Choose existing template</option>
+                                        <option value="{{template}}" ng-repeat= "template in templates">{{template.title}}</option>
+                                    </select>
+                                </div>
+                                <div class="package-box" ng-repeat="package in event.packages">
+                                    <div class="addvenue-city addvenue-margin">
+                                        <div class="field">
+                                            <label>TITLE</label>
+                                            <input type="text" name="venue" ng-model="event.packages[$index].title">
+                                        </div></div>
+                                    <div class="addvenue-add addvenue-margin">
+                                        <div class="field">
+                                            <label>LINK</label>
+                                            <input type="text" name="venue" ng-model="event.packages[$index].ticketLink">
+                                        </div></div>
+                                    <div class="addvenue-zip addprice">
+                                        <div class="field">
+                                            <label>PRICE</label>
+                                            <input type="text" name="venue" ng-model="event.packages[$index].price">
+                                        </div>
+                                    </div>
+                                    <div class="addvenue-zip">
+                                        <div class="field">
+                                            <label class="cursor-pnt">Package Type</label>
+                                            <div class="field ">
+                                                <input type="checkbox" name="package" id="package_{{$index}}" ng-checked="!event.packages[$index].isParking" ng-click="event.packages[$index].isParking = false">
+                                                <label for="package_{{$index}}">Package</label>
+                                                <input type="checkbox" name="parking" id="parking_{{$index}}" ng-checked="event.packages[$index].isParking" ng-click="event.packages[$index].isParking = true">
+                                                <label for="parking_{{$index}}">Parking</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="cursor-pnt">DESCRIPTION</label>
+                                        <text-angular name="packageDescription-{{$index}}" ng-model="event.packages[$index].description"></text-angular>
+                                    </div>
+
+                                    <div class="tem-save" ng-click="saveAsTemplate(event.packages[$index])"><img src="images/ic-save.png"><span class="hide-pack"> SAVE AS A TEMPLATE </span></div>
+                                    <div class="del-pack" ng-click="deletePackage($index)"><img src="images/del.png"><span class="hide-pack"> DELETE PACKAGE</span></div>
+
+                                </div>
+
+                                <span id="datatable"></span>
+
+                            </div>
+                            <div class="sectiontab" id="content4">
+
+                                <div class="package-button pack-btn-rs">
+                                    <button type="button" class="button submit wf-button" id="addmedia" ng-click="addMedia()">ADD MEDIA</button>
+                                </div>
+                                <div class="line-space-media"></div>
+
+                                <div style="padding: 15px 0 15px 0;" ng-repeat="media in event.media">
+                                    <div class="media mediahight">
+                                        <div class="media-text">ICON</div>
+                                        <div class="icon-media">
+                                            <img ng-class="{'mdborder' : event.media[$index].type == 'Radio'}" src="images/ic-radio@2x.png" ng-click="event.media[$index].type = 'Radio'">
+                                            <img ng-class="{'mdborder' : event.media[$index].type == 'Spotify'}" src="images/ic-spotify@2x.png" ng-click="event.media[$index].type = 'Spotify'">
+                                            <img ng-class="{'mdborder' : event.media[$index].type == 'Attach'}" src="images/ic-attach@2x.png" ng-click="event.media[$index].type = 'Attach'">
+                                        </div>
+                                        <div class="field half first">
+                                            <label for="name">TITLE</label>
+                                            <input type="text" name="name" ng-model="event.media[$index].title" />
+                                        </div>
+                                        <div class="field half">
+                                            <label >MEDIA LINK</label>
+                                            <input type="text" name="email" ng-model="event.media[$index].link" />
+                                        </div>
+                                    </div>
+                                    <div class="del-media" ng-click="deleteMedia($index)"><img src="images/del.png"><span class="hide-pack"> DELETE MEDIA</span></div>
+                                </div>
+
+                                <span id="MediaData"></span>
+
+                            </div><br/>
+                            <div class="sectiontab" id="content5">
+
+                            <div class="select-package">
+
+                                    <select ng-model="templateRule" ng-change="addTemplateToRule(templateRule)">
+                                        <option value="">Choose existing template</option>
+                                        <option value="{{rule.termsAndRules}}" ng-repeat="rule in rulesList">{{htmlToPlaintext(rule.termsAndRules)}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label>RULES</label>
+                                    <!--<textarea ng-model="event.termsAndRules" name="editor3" id="editor3" rows="8" placeholder="
+                                         <div>There are many ways to market a product or a service and providing the potential clients and customers with testimials is one of the best ways.</div>
+                                         <div>There are many ways to market a product or a service and providing the potential clients and customers with testimials is one of the best ways to market.</div>
+                                     ">
+                                    </textarea>-->
+                                    <text-angular name="termsAndRules" ng-model="event.termsAndRules"></text-angular>
+                                </div>
+                                <div ng-if="!ruleSelected" class="tem-save" ng-click="saveAsTemplateRules(event.termsAndRules)"><img src="images/ic-save.png"><span class="hide-pack"> SAVE AS A TEMPLATE </span></div><br/><br/>
+                            </div>
+                    </div>
+                </section>
+            </div>
+            <div class="addevent-bottom-bar">
+                <div class="addeven-bottom-left" ng-if="event._id">
+                    <div class="delteam">
+                        <a href ng-click="deleteEvent(event._id)" class="">
+                            <img src="images/del.png">
+                            <span>DELETE EVENT</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="addvent-bottom-right">
+                    <div class="foo-back">
+                        <a href ui-sref="app.events" class="button submit wf-button back">BACK</a>
+                    </div>
+                    <div class="foot-save">
+                        <button href type="submit" class="button submit wf-button">SAVE</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+

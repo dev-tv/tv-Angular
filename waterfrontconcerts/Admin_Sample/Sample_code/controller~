@@ -1,0 +1,20 @@
+angular.module('controllers')
+    .controller('LoginCtrl' , function($scope , $http, $state, ApiService, $localStorage,toaster){
+	// Variable declearation    	
+	$scope.user = {};
+
+    		$scope.login = function(data){  
+		        // login service called		        
+		        ApiService.login(data).then(function(res){
+		            var status = res.data.status;
+		            if(status == 1){
+		                $localStorage.token = res.data.token;		                
+		                $state.go("app.events");
+		            }else{
+                        $scope.user.password = '';
+		                toaster.pop('error', "Alert", res.data.message);
+                        return false;
+		            }
+		        })
+		    }
+    })

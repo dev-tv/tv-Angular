@@ -1,0 +1,169 @@
+<section id="intro" class="wrapper style1">
+
+    <div class="addevent-topbar">
+
+        <div class="addeven-top">
+
+            <a href ui-sref="app.venues">
+            <img src="images/ic-header-back.png">
+            </a>
+
+            <div class="page-title" ng-if="venue._id">{{venueTitle}}</div>
+            <div class="last-edited" ng-if="venue._id">Last edited: {{venue.updatedAt | date : "dd MMM yyyy"}} at {{venue.updatedAt | date : "H.mm"}} by {{venue.updatedBy}}
+            </div>
+            <div class="page-title" ng-if="!venue._id">Add Venue</div>
+            <div class="single-new" ng-if="!venue._id"></div>
+        </div>
+    </div>
+
+    <div class="venue-inner">
+        <section id="three" class="wrapper style1 fade-up">
+            <form class="addVenueForm" ng-submit="addVenue(venue)">
+                <div class="inner adds-bottom">
+                    <div class="split style1">
+                        <section>
+                                <div class="field">
+                                    <label >TITLE</label>
+                                    <input type="text" name="title" ng-model="venue.title" placeholder="Darling's Waterfront pavilion" maxlength="50"/>
+                                </div>
+
+                                <div class="field half first">
+                                  <label >BOX OFFICE PHONE </label>
+                                  <input type="text" name="boxOfficePhone" ng-model="venue.boxOfficePhone" placeholder="605-081-6464" />
+                                </div>
+                                <div class="field half">
+                                    <label>BOX OFFICE WORKING HOURS</label>
+                                    <input type="text" name="boxOfficePhone" ng-model="venue.boxOfficeWorkingHours" placeholder="Monday-Friday 9:00AM to 4:00PM" />
+                                </div>
+
+                                <div class="field">
+                                    <label>INFO</label>
+                                    <text-angular name="info" ng-model="venue.info" ></text-angular>
+                                </div>
+                                <div class="addvenue-city addvenue-margin">
+                                    <div class="field">
+                                        <label>CITY</label>
+                                        <!--<input type="text" places-auto-complete ng-model="venue.city" on-place-changed="placeChanged()" name="city" ng-change="reVenue(venue.city)">-->
+                                        <select class="selectDropdown" ng-model="venue.city">
+                                            <option value="" disabled>--Choose City--</option>
+                                            <option value="{{city._id}}" ng-repeat="city in cities" ng-selected="city._id == venue.city">{{city.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="addvenue-add addvenue-margin">
+                                    <div class="field">
+                                        <label>ADDRESS</label>
+                                        <input type="text" name="venue" ng-model="venue.address" placeholder="786 Eve Garden  Apt. 693" >
+                                    </div>
+                                </div>
+                                <div class="addvenue-zip">
+                                    <div class="field">
+                                        <label>ZIP</label>
+                                        <input type="text" name="venue" ng-model="venue.zip" placeholder="12345" >
+                                    </div>
+                                </div>
+
+                                <div class="field">
+                                    <label>DESCRIPTION</label>
+                                    <text-angular name="description" ng-model="venue.description" ></text-angular>
+                                </div>
+
+                                <div class="field">
+                                    <label>DIRECTIONS</label>
+                                    <text-angular name="directions" ng-model="venue.directions" ></text-angular>
+                                </div>
+
+                                <div class="field">
+                                    <label>TERMS/RULES</label>
+                                    <text-angular name="termsAndRules" ng-model="venue.termsAndRules" ></text-angular>
+                                </div>
+                                <div class="for-col-mar">
+                                    <div class="field  first">
+                                        <label>SEO </label>
+                                        <input type="text" ng-model="venue.seoTitle" placeholder="Title" name="seoTitle" id="seoTitle"  maxlength="50" />
+                                    </div>
+                                    <div class="field ` event-fbg">
+                                        <input type="text" ng-model="venue.seoDescription" placeholder="Description" name="seoDescription" id="seoDescription"  maxlength="50" />
+                                    </div>
+                                </div>
+                        </section>
+                        <section>
+                            <div class="box alt">
+                                <div class="row uniform">
+                                    <div class="4u foru" ng-repeat="img in venue.galleryImages" ng-click="addImages()">
+                                        <span class="image fitSquare" ng-if="$index < 8">
+                                                    <img ng-src="{{img}}" alt="" width="120">
+                                                  </span>
+                                        <span class="image fitSquare" ng-if="$index == 8 && venue.galleryImages.length == 9">
+                                                    <img ng-src="{{img}}" alt="" width="120">
+                                                  </span>
+
+                                        <span class="image fitSquare" ng-if="$index == 8 && venue.galleryImages.length > 9">
+                                        <img src="../images/more_img.png" alt="" width="120">
+                                      </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="addevn-upimg" ng-click="addImages()">
+                                <a href class="button submit wf-button">UPLOAD IMAGES</a>
+                            </div>
+                            <div class="addven-chart" ng-if="venue.sittingChartImage">
+                                <h3>SEATING CHART</h3>
+                                <div class="row uniform">
+                                    <div class="4u foru" ng-repeat="img in venue.sittingChartImage" ng-click="addImages()">
+                                        <span class="image fitSquare" ng-if="$index < 8">
+                                                    <img ng-src="{{img}}" alt="" width="120">
+                                                  </span>
+                                        <span class="image fitSquare" ng-if="$index == 8 && venue.galleryImages.length == 9">
+                                                    <img ng-src="{{img}}" alt="" width="120">
+                                                  </span>
+
+                                        <span class="image fitSquare" ng-if="$index == 8 && venue.galleryImages.length > 9">
+                                        <img src="../images/more_img.png" alt="" width="120">
+                                      </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="addven-pay sitebarcheck">
+                                <h3>TYPES OF PAYMENT ACCEPTED</h3>
+                                <div class="12u$">
+                                    <div class="field">
+                                        <input type="checkbox" ng-checked="payment('Visa')" name="visa" id="visa" ng-click="addPaymentOption('Visa')" >
+                                        <label for="visa">Visa</label>
+                                    </div>
+                                    <div class="field">
+                                        <input type="checkbox" ng-checked="payment('Mastercard')" name="mastercard" id="mastercard" ng-click="addPaymentOption('Mastercard')" >
+                                        <label for="mastercard">Mastercard</label>
+                                    </div>
+                                    <div class="field">
+                                        <input type="checkbox" ng-checked="payment('AmericanExpress')" name="americanexpress" id="americanexpress" ng-click="addPaymentOption('AmericanExpress')" >
+                                        <label for="americanexpress">AmericanExpress</label>
+                                    </div>
+                                    <div class="field">
+                                        <input type="checkbox" ng-checked="payment('Discover')" name="discover" id="discover" ng-click="addPaymentOption('Discover')" >
+                                        <label for="discover">Discover</label>
+                                    </div>
+                                    <div class="field">
+                                        <input type="checkbox" ng-checked="payment('Cash')" name="cash" id="cash" ng-click="addPaymentOption('Cash')" >
+                                        <label for="cash">Cash</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="addevent-bottom-bar">
+                    <div class="addeven-bottom-left">
+                        <div class="delteam" ng-if="venue._id !== undefined"><a href ng-click="deleteVenue(venue._id)" class=""><img src="images/del.png"><span>DELETE VENUE</span></a></div>
+                    </div>
+                    <div class="addvent-bottom-right">
+                        <div class="foo-back"><a href ui-sref="app.venues" class="button submit wf-button back">BACK</a></div>
+                        <div class="foot-save"><button type="submit" class="button submit wf-button"><span ng-if="venue._id == undefined">SAVE</span><span ng-if="venue._id !== undefined">Update</span></button></div>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</section>
+

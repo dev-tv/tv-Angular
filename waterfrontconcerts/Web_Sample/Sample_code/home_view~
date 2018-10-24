@@ -1,0 +1,232 @@
+<div ng-controller="HomeCtrl">
+	<section class="banner">
+	<div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
+		<img src="images/carousel-4.jpg" class="banner-fit" ng-if="!slides.length && sliderEmpty">
+		<div uib-slide ng-repeat="slide in slides track by slide.id" index="$index" ui-sref="app.event-details({eventId : slide.eventId})">
+			<a href="{{slide.buttonLink}}" target="_blank">
+				<div class="home-banner" ng-if="slide.eventId">
+					<div class="combined-shape">
+						<div class="rectangle">
+							<div class="new-show">NEW SHOW</div>
+							<div class="show-img"><img src="images/pink_tunda.png"></div>
+						</div>
+
+						<div class="banner-date">
+							<div class="bn-month">{{slide.eventStartDate | date : "MMM"}}</div>
+							<div class="bn-date">{{slide.eventStartDate | date : "dd"}}</div>
+						</div>
+						<div class="the-guitar-event-of">{{slide.title | cut:true:30:' ...'}}</div>
+						<div class="joe-bonamassa">{{slide.bannerText | cut:true:13:' ...'}}</div>
+
+						<div class="fill"><img src="images/place_icon.png"></div>
+						<div class="pier-in">{{slide.venue}}</div>
+					</div>
+					<div class="gray-img"><img src="images/gray_tunda_bg.png"></div>
+					<div class="sky-img"><img src="images/sky_tunda_bg.png"></div>
+					<div class="path" ng-if="slide.eventOnSaleDate">
+						<div class="tickets-on-sale" style="line-height: 40px" ng-if="slide.isOnsale == false">On sale - {{slide.eventOnSaleDate | date : "MMM d, y"}} </div>
+						<div class="tickets-on-sale" style="line-height: 40px" ng-if="slide.isOnsale == true">On sale NOW</div>
+						<div class="bn-event-time">&nbsp;</div>
+					</div>
+					<div class="path" ng-if="!slide.eventOnSaleDate">
+						<div class="tickets-on-sale" style="line-height: 40px">Free tickets</div>
+						<div class="bn-event-time">&nbsp;</div>
+					</div>
+				</div>
+				<div class="home-banner2" ng-if="!slide.eventId">
+					<h2 class="toptitle">{{slide.title | cut:true:25:' ...'}}</h2><br>
+					<h4 class="toptitle">{{slide.bannerText | cut:true:30:' ...'}}</h4><br>
+					<span class="learnmorebtn">{{slide.buttonText}}</span>
+				</div>
+				<img src="images/waterfront_main_banner.png" lazy-img="{{slide.image}}" class="banner-fit">
+			</a>
+		</div>
+	</div>
+
+	</section>
+	<!-- end of banner/carousel -->
+	<section class="onsale">
+
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<h1 class="title">On Sale Now<button class="btn btn-primary pull-right" ng-click="downloadAppBanner()">Get Updates on our Events</button></h1>
+				</div>
+			</div>
+
+			<div ng-if="!onsaledata.length && eventEmpty">Oops! There are currently no shows available in your city. Check back soon.</div>
+			<div class="row">
+				<div class="col-sm-6 col-md-3 sr-sale sale" ng-repeat="saledata in onsaledata">
+					<div class="saleimage">
+						<div class="monthdate"><span class="month text-uppercase">{{saledata.startDate | date : "MMM"}}</span><span class="date">{{saledata.startDate | date : "dd"}} </span></div>
+						<a href="/event/{{saledata.slug}}"><img src="images/home_event.png" lazy-img="{{saledata.featureImage}}" alt="" class="center-block" height="270"></a>
+					</div>
+					<div class="content">
+						<h3 class="saletitle"><a href="/event/{{saledata.slug}}">{{saledata.title | cut:true:30:' ...'}}</a></h3>
+						<p class="subtitle">{{saledata.subTitle | cut:true:35:' ...'}}</p>
+						<div class="salebuttons clearfix">
+							<button ng-if="saledata.isParking == true" class="btn btn-primary parking firstbtn"><a href="{{saledata.parkingLink}}" target="_blank"><span class="ic-parking"></span>Parking</a></button>
+							<button ng-if="saledata.isPackage == true" class="btn btn-primary parking secondbtn"><a href="/event/{{saledata._id}}"><span class="ic-package"></span>PACKAGE</a></button>
+						</div>
+						<p class="doorshow">Show: {{saledata.startTime | date : "h:mma"}}</p>
+						<a href="/venue/{{saledata.venue.slug}}" class="link">{{saledata.venue.title | cut:true:35:' .'}}</a>
+					</div>
+					<div class="buyprice"  ng-if="saledata.tickets[0]">
+						<div class="price">${{saledata.tickets[0].price}}</div>
+						<a href="{{saledata.generalTicketLink}}" ng-if="saledata.tickets.length && saledata.isOnsale" target="_blank" class="buy">On Sale Now</a>
+						<a href class="buy" ng-if="saledata.tickets.length && !saledata.isOnsale" style="font-size: 14px">
+							ON SALE - {{saledata.onSaleDate | date : "MMM d, y"}}
+						</a>
+					</div>
+					<div class="buyprice"  ng-if="!saledata.tickets[0]">
+						<span class="free">Free</span>
+					</div>
+				</div>
+				<!-- end of sale -->
+			</div>
+			<div class="row" ng-if="isMoreOnSaleEvents">
+				<div class="col-sm-12">
+					<button ng-click="loadMoreOnSaleEvents()" class="btn btn-primary loadmore">Load More Events</button>
+				</div>
+			</div>
+		</div>
+		<!-- end of container -->
+	</section>
+	<!-- end of onsale section -->
+	<section class="upcomingsection">
+
+		<div class="container" ng-init="gridlist = 'grid'">
+			<div class="row title">
+				<div class="col-sm-12 col-md-12 col-lg-4">
+					<h1 class="">UPCOMING SHOWS
+					</h1>
+				</div>
+				<div class="col-sm-12 col-md-12 col-lg-8" style="margin-top: 10px;">
+					<div class="sortby">
+						<div class="row">
+							<div class="col-xs-8 col-sm-9 col-md-8 col-lg-10">
+								<div class="row sr-text-align">
+									<div class="col-md-8 col-sm-6 col-xs-12">
+										<div class="dropdown" uib-dropdown="" dropdown-append-to-body=""><span class="selectBoxHome">Location:</span>
+											<select class="selectInHome selected dropdown-toggle ng-pristine ng-valid ng-not-empty ng-touched" ng-model="filterEventsUpcoming.location" ng-change="filterUpcomingEvent(filterEventsUpcoming);getVenues(filterEventsUpcoming)" style="">
+												<option class="selectInHome" value="0" >All</option>
+												<!-- ngRepeat: location in locations -->
+												<option class="selectInHome" value="{{location._id}}" ng-repeat="location in locations" ng-selected="location._id == selectedCity">{{location.name}}</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-4 col-sm-6 col-xs-12">
+										<div class="dropdown" uib-dropdown="" dropdown-append-to-body=""><span class="selectBoxHome">Venue:</span>
+											<select class="selectInHome selected dropdown-toggle ng-pristine ng-valid ng-not-empty ng-touched" ng-model="filterEventsUpcoming.venue" ng-change="filterUpcomingEvent(filterEventsUpcoming)" style="">
+												<option class="selectInHome" value="0" >All</option>
+												<!-- ngRepeat: venue in venues -->
+												<option class="selectInHome" value="{{venue._id}}" ng-repeat="venue in venues" ng-selected="venue._id == seletedVenue">{{venue.title}}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-xs-4 col-sm-3 col-md-4 col-lg-2 text-right">
+								<span class="gridlist">
+									<span class="grid" ng-click="toggleListView(gridlist)" ng-class="gridlist == 'grid' ? 'active' : ''"></span>
+									<span class="list" ng-click="toggleListView(gridlist)" ng-class="gridlist == 'list'? 'active' : ''"></span>
+								</span>
+							</div>
+						</div>
+					</div> <!-- end of pull right  -->
+				</div>
+				<!-- end of col -->
+			</div>
+			<span ng-if="!eventdata.length && eventdataEmpty">Oops! There are currently no shows available in your city. Check back soon.</span>
+			<div class="row sr-sale" ng-if="gridlist == 'grid'">
+				<div class="col-md-6 upcomingshow clearfix" ng-repeat="griddata in eventdata">
+					<div class="upcomingimage">
+						<div class="monthdate">
+							<span class="month text-uppercase">{{griddata.startDate | date : "MMM"}}</span><span class="date">{{griddata.startDate | date : "dd"}} </span>
+						</div>
+						<a ng-href="/event/{{griddata.slug}}"><img src="images/home_event.png" lazy-img="{{griddata.featureImage}}" alt="" class="center-block" height="270"></a>
+					</div>
+					<div class="content">
+						<div class="inner">
+							<h3 class="upcomingtitle"><a ng-href="/event/{{griddata.slug}}">{{griddata.title | cut:true:38:' ...'}} </a></h3>
+							<p class="subtitle">{{griddata.subTitle | cut:true:40:' ...'}}</p>
+
+							<div class="upcomingbuttons clearfix" ng-if="griddata.isParking && griddata.isPackage">
+								<button  class="btn btn-primary parking firstbtn pull-left"><a href="{{griddata.parkingLink}}" target="_blank"><span class="ic-parking"></span>Parking</a></button>
+								<button class="btn btn-primary parking secondbtn pull-right"><a href="/event/{{griddata.slug}}"><span class="ic-package"></span>PACKAGE</a></button>
+							</div>
+
+							<div class="upcomingbuttons clearfix single" ng-if="griddata.isParking && !griddata.isPackage">
+								<button  class="btn btn-primary parking firstbtn pull-left single"><a target="_blank" href="{{griddata.parkingLink}}"><span class="ic-parking"></span>Parking</a></button>
+							</div>
+
+							<div class="upcomingbuttons clearfix single" ng-if="!griddata.isParking && griddata.isPackage">
+								<button class="btn btn-primary parking secondbtn single"><a href="/event/{{griddata.slug}}"><span class="ic-package"></span>PACKAGE</a></button>
+							</div>
+							<a href="/venue/{{griddata.venue.slug}}" class="link">{{griddata.venue.title | cut:true:45:' .'}}</a>
+						</div>
+
+						<div class="buyprice"  ng-if="griddata.tickets[0]">
+							<div class="price">${{griddata.tickets[0].price}}</div>
+							<a href="{{griddata.generalTicketLink}}" target="_blank" class="buy" ng-if="griddata.tickets.length && griddata.isOnsale">On Sale Now</a>
+							<a href="" class="buyonsale" ng-if="griddata.tickets.length && !griddata.isOnsale">
+								ON SALE - {{griddata.onSaleDate | date : "MMM d, y"}}
+							</a>
+						</div>
+						<div class="buyprice"  ng-if="!griddata.tickets[0]">
+							<a href="" class="free">Free</a>
+						</div>
+					</div>
+				</div>
+				<!-- end of upcoming -->
+
+
+			</div>
+
+			<!-- end of row -->
+
+			<div class="list"  ng-if="gridlist == 'list'" ng-repeat="listdata in eventdata">
+				<div class="row">
+					<div class="col-sm-12 eventlist" ng-class="['col-sm-12','eventlist',{'doublebadge' : ((listdata.isPackage && !listdata.isParking)||(!listdata.isPackage && listdata.isParking))}]">
+						<div class="listdate"><span class="month text-uppercase">{{listdata.startDate | date : "MMM"}}</span><span class="date">{{listdata.startDate | date : "dd"}} </span></div>
+						<div class="listcontent">
+							<a href="/event/{{listdata.slug}}">
+								<div class="titlesubtitle" style="color: #4a4a4a">
+									<div class="listtitle">{{listdata.title | cut:true:35:' ...'}}</div>
+									<p class="listsubtitle">{{listdata.subTitle | cut:true:50:' ...'}}</p>
+								</div>
+							</a>
+							<div class="eventlistinfo">
+								<button ng-if="listdata.isPackage == true" class="btn btn-primary parking pack-np"><a href="/event/{{listdata.slug}}"><span class="ic-package"></span>Package</a></button>
+								<button ng-if="listdata.isParking == true" class="btn btn-primary parking pack-np"><a target="_blank" href="{{listdata.parkingLink}}"><span class="ic-parking"></span>Parking</a></button>
+								<a href="/venue/{{listdata.venue.slug}}" class="link">{{listdata.venue.title | cut:true:35:' ...'}}</a>
+							</div>
+						</div>
+
+						<div class="listbuttons range" ng-if="listdata.tickets[0]">
+                            <div class="price">${{listdata.tickets[0].price}}</div>
+                            <a href="{{listdata.generalTicketLink}}" target="_blank" class="buynow" ng-if="listdata.tickets.length && listdata.isOnsale">On Sale Now</a>
+
+                            <a href class="buyonsale" ng-if="listdata.tickets.length && !listdata.isOnsale" >
+                              ON SALE - {{listdata.onSaleDate | date : "MMM d, y"}}
+                            </a>
+                        </div>
+                        <div class="listbuttons range" ng-if="!listdata.tickets[0]">
+                            <a href="" class="free">Free</a>
+                        </div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row" ng-if="isMoreUpcomingEvents">
+				<div class="col-sm-12">
+					<button ng-click="loadMoreUpcomingEvents()" class="btn btn-primary loadmore">Load More Events</button>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+

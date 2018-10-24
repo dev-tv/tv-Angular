@@ -1,0 +1,132 @@
+<section ng-controller="event">
+	<div class="container">
+		<div class="row">
+
+			<div class="col-sm-12">
+				<div class="event pagehead clearfix">
+					<h1 class="page-title event-details">{{EventDetails.title}}</h1><a class="backtoevent btn btn-primary btn-back-event" href="/">Back to events list</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 col-md-push-8">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<div class="sponsor-box" ng-repeat="sponsor in EventDetails.sponsors" ng-click="viewImage([sponsor.image],0)">
+							<img src="images/venue_main.png" lazy-img="{{sponsor.image}}">
+							<div class="sponsor-title">{{sponsor.name}}</div>
+						</div>
+						<div class="socialbox event" >
+							<p class="event-p event-time-onsale" ng-if="EventDetails.tickets.length != 0 && EventDetails.tickets[0].name !== '' && !EventDetails.isOnsale">On sale {{EventDetails.onSaleDate | date : "MM/dd"}} at {{EventDetails.onSaleTime | date : "h:mm a"}}</p>
+							<p class="event-p event-time-onsale" ng-if="EventDetails.tickets.length != 0 && EventDetails.tickets[0].name !== '' && EventDetails.isOnsale">On sale now</p>
+							<p class="tic-con-black"><b>Show Time</b> : {{EventDetails.startTime | date : "h:mm a"}}</p><br>
+							<p class="tic-con-black"><b>Door Time</b> : {{EventDetails.doorTime | date : "h:mm a"}}</p>
+							<a href="/venue/{{EventDetails.venue.slug}}" class="event-tickets-loc">{{EventDetails.venue.title}}</a>
+						</div>
+						<div class="comb-ticket-pack">
+
+              			<div class="ds-ticked-box" ng-repeat="ticket in EventDetails.tickets">
+							<a href="{{ticket.link}}" target="_blank">
+							<div class="ticket-box sidebartktbox">
+									<img class="ds-img-left" src="images/red_top.png">
+									<div class="mask-left"></div>
+
+									<div class="ticket-packs">
+										<div class="ticket-name text-uppercase">{{ticket.name | cut:true:25:'...'}}</div>
+										<div class="ticket-content">
+											<div class="tic-combine" ng-if="ticket.startPresaleDate != null && ticket.startPresaleDate != 0">
+												<div class="tic-con-black">Presale:</div>
+												<div class="tic-con-right">{{ticket.startPresaleDate | date : "MM/dd"}} at {{ticket.startPresaleTime | date : "h:mm a"}}-{{ticket.endPresaleDate | date : "MM/dd"}} at {{ticket.endPresaleTime | date : "h:mm a"}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="mask-right">
+										<div class="ticket-price">${{ticket.price}}</div>
+										<div class="ticket-buy">BUY</div>
+									</div>
+							</div>
+							</a>
+						</div>
+							<div class="ds-ticked-box" ng-repeat="package in EventDetails.packages">
+							<div class="ticket-box sidebartktbox">
+								<img class="ds-img-left" src="images/blue_top.png">
+								<div class="mask-left-sky"></div>
+								<div class="ticket-packs" ng-click="packageDetail(package)">
+									<div class="ticket-name text-uppercase">{{package.title | cut:true:25:'...'}}</div>
+									<div class="ticket-content">
+										<div class="tic-con-park">Read more:</div>
+										<div class="tic-con-right">{{htmlToPlaintext(package.description) | cut:true:30:'...'}}</div>
+									</div>
+								</div>
+									<div class="mask-right-sky">
+										<a href="{{package.ticketLink}}" target="_blank">
+											<div class="ticket-price">${{package.price}}</div>
+											<div class="ticket-buy">BUY</div>
+										</a>
+									</div>
+							</div>
+					</div>
+						</div>
+						<div class="evntseatbox" ng-if="EventDetails.venue.sittingChartImage.length">
+							<h3 class="phonetitle">Seating Chart</h3>
+							<div class="row">
+								<div class="col-xs-12 col-md-12 col-sm-12">
+									<img ng-click="viewImage([EventDetails.venueSittingChartImage],0)" ng-src="{{EventDetails.venueSittingChartImage}}" style="width: 100%;object-fit: cover;padding-bottom: 5px;"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<div class="emailbox event visible-md visible-lg" ng-if="EventDetails.media.length != 0 && EventDetails.media[0].title !== ''">
+							<h3 class="emailtitle">Media</h3>
+							<div ng-repeat="media in EventDetails.media">
+								<p ng-class="['event-p' ,{radio : media.type == 'Radio'},{spotify : media.type == 'Spotify'},{attach : media.type == 'Attach'}]"><a target="_blank" href="{{media.link}}">{{media.title}}</a></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<div class="emailbox event visible-md visible-lg" ng-if="EventDetails.galleryImages.length != 0">
+							<h3 class="emailtitle">Gallery</h3>
+							<div class="row">
+								<div class="col-md-4" ng-repeat="img in EventDetails.galleryImages">
+									<img ng-click="viewImage(EventDetails.galleryImages,$index)" ng-src="{{img}}" width="120" style="width: 90px;height: 90px;object-fit: cover;padding-bottom: 5px;"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8 col-md-pull-4">
+				<div class="box singlepageimg">
+					<div class="monthdate">
+						<span class="month text-uppercase ng-binding">{{EventDetails.startDate | date : "MMM"}}</span><span class="date ng-binding">{{EventDetails.startDate | date : "dd"}}  </span>
+					</div>
+					<img ng-click="viewImage([EventDetails.bannerImage],0)" src="images/event_banner.png" lazy-img="{{EventDetails.bannerImage}}" alt="" class="center-block event-center-img img-responsive">
+					<div class="txt-desc" ng-bind-html="EventDetails.description"></div>
+				</div>
+				<div class="box info" ng-if="EventDetails.termsAndRules">
+					<h3 class="event-terms-title" >Terms</h3>
+					<div class="txt-desc" ng-bind-html="EventDetails.termsAndRules"></div>
+				</div>
+
+				<div class="emailbox event visible-sm visible-xs" ng-if="EventDetails.media.length != 0 && EventDetails.media[0].title !== ''">
+					<h3 class="emailtitle">Media</h3>
+					<div ng-repeat="media in EventDetails.media">
+						<p ng-class="['event-p' ,{radio : media.type == 'Radio'},{spotify : media.type == 'Spotify'},{attach : media.type == 'Attach'}]"><a target="_blank" href="{{media.link}}">{{media.title}}</a></p>
+					</div>
+				</div>
+
+				<div class="emailbox event visible-sm visible-xs" ng-if="EventDetails.galleryImages.length != 0">
+					<h3 class="emailtitle">Gallery</h3>
+					<div class="row">
+						<div class="col-xs-4 col-md-4 col-sm-4" ng-repeat="img in EventDetails.galleryImages">
+							<img ng-click="viewImage(EventDetails.galleryImages,$index)" ng-src="{{img}}" width="120" style="width: 90px;height: 90px;object-fit: cover;padding-bottom: 5px;"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
